@@ -1,6 +1,6 @@
 a = "hellohello\thello\b\n"
 # len 只表示字串長度 與print出來的字串無關
-# 故\b(backspace) 及 \t(Tab) 都是一個字元
+# 故\b.txt(backspace) 及 \t(Tab) 都是一個字元
 print(len(a))
 # replace 有回傳值 但不改變原字串
 b = a.replace("hello", "goodbye")
@@ -17,7 +17,7 @@ print('apple'.upper() == 'Apple'.upper())
 namelist = ["Elwing", "Amy", "Elwing"]
 b = namelist.append("Bob")
 print(namelist)
-# append 無回傳值 b 為 None
+# append 無回傳值 b.txt 為 None
 print(b)
 """
 # 千萬小心下面的狀況

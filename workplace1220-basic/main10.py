@@ -15,7 +15,7 @@ print("有幾輛車 : ", len(buses["datas"]))
 # 注意 超級重要 !!
 # buses -> dict
 # buses['datas'] -> List
-# b -> dict
+# b.txt -> dict
 # List 裡面的成員是 Dict
 for b in buses["datas"] :
     print(b["BusID"], "(", b["Longitude"], ",",

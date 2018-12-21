@@ -7,13 +7,13 @@ doTimes = int(input("輸入數列數量"))
 while i < doTimes :
     if i == 0:
         result = 0
-        b = 0
+        b.txt = 0
     elif i == 1 :
         a = 1
         result = result + a
     else :
-        result = a + b
-        b = a
+        result = a + b.txt
+        b.txt = a
         a = result
 
     print("第 %d 項 為 : %d"%(i + 1,result))
