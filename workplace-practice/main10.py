@@ -1,5 +1,6 @@
 
 import requests
+from urllib.request import urlretrieve
 import re
 import os
 import time
@@ -30,7 +31,7 @@ for r in html.find_all("div", class_="r-ent"):
           "評價:",rate)
 """
 def get_article(dom): # 使用bs4 轉換 html格式 並尋找文章列表
-    html = BeautifulSoup(dom, "html.parser")
+    html = BeautifulSoup(dom, 'html.parser')
 
     article = []
     divs = html.find_all("div", class_="r-ent")
@@ -43,18 +44,18 @@ def get_article(dom): # 使用bs4 轉換 html格式 並尋找文章列表
             except ValueError:
                 pass
         if r.find("a"):
-            href ="https://www.ptt.cc" + r.find("a")["href"]
+            href ="http://www.ptt.cc" + r.find("a")["href"]
             title = r.find("a").text
             article.append({
+                "push": push,
                 "title" : title,
-                "href" : href,
-                "push" : push
+                "href" : href
                 })
     return article
 
 def parse(dom): ## 找到文章內所有圖片超連結
-    html = BeautifulSoup(dom, "html")
-    links = html.find(id = "main-content").find_all("a")
+    html = BeautifulSoup(dom, 'html.parser')
+    links = html.find(id="main-content").find_all("a")
     img_url = []
     for link in links :
         if re.match(r"^https?://(i.)?(m.)?imgur.com",link["href"]):
@@ -64,9 +65,43 @@ def parse(dom): ## 找到文章內所有圖片超連結
 def save(img_url,title): ##儲存圖片
     if img_url :
         try:
+
             dname = title.strip() # 去除字串前後空白
-            os.mkdir(dname)
+            if not os.path.exists(dname):
+                os.mkdir(dname)
             for url in img_url :
+                if url.split("//")[1].startswith("m."):
+                    url = url.replace("//m.", "//i.")
+                if not url.split("//")[1].startswith("i."):
+                    url = url.split("//")[0] + "//i." + url.split("//")[1]
+                if not url.endswith(".jpg"):
+                    url = url + ".jpg"
+                fname = url.split("/")[-1]
+                urlretrieve(url, os.path.join(dname,fname))
+        except Exception as e:
+            print(e)
+
+def main():
+    pagecount = int(input("要下載幾頁?"))
+    page = 3999
+    page_stop = page - pagecount
+
+    while True :
+        sex_url = "https://www.ptt.cc/bbs/sex/index" +str(page) + ".html"
+        my_art = get_article(get_wb(sex_url))
+        for art in my_art:
+            page = get_wb(art["href"])
+            if page:
+                img_url = parse(page)
+                save(img_url,"J:/crawler/try")
+        page = page - 1
+        if page == page_stop:
+            break
+
+if __name__=="__main__":
+    main()
+
+
                 
 
 
