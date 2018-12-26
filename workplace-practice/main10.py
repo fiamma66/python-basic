@@ -85,17 +85,19 @@ def save(img_url,title): ##儲存圖片
 
 def main():
     pagecount = int(input("要下載幾頁?"))
-    page = 3999
+    file = input("存哪裡? ex J:/crawler/try")
+    page = 4001
     page_stop = page - pagecount
 
     while True :
         sex_url = "https://www.ptt.cc/bbs/sex/index" +str(page) + ".html"
+        print("現在處理 : ",sex_url)
         my_art = get_article(get_wb(sex_url))
         for art in my_art:
             pages = get_wb(art["href"])
             if pages:
                 img_url = parse(pages)
-                save(img_url,"J:/crawler/try")
+                save(img_url,file)
         page = page - 1
         if page == page_stop:
             break
