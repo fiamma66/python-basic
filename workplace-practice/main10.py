@@ -34,6 +34,7 @@ def get_article(dom): # 使用bs4 轉換 html格式 並尋找文章列表
     html = BeautifulSoup(dom, 'html.parser')
 
     article = []
+    # 建立空List
     divs = html.find_all("div", class_="r-ent")
     for r in divs:
 
@@ -46,6 +47,7 @@ def get_article(dom): # 使用bs4 轉換 html格式 並尋找文章列表
         if r.find("a"):
             href ="http://www.ptt.cc" + r.find("a")["href"]
             title = r.find("a").text
+            # 在List中 加入dict字典 內容是網頁列表內容
             article.append({
                 "push": push,
                 "title" : title,
@@ -90,9 +92,9 @@ def main():
         sex_url = "https://www.ptt.cc/bbs/sex/index" +str(page) + ".html"
         my_art = get_article(get_wb(sex_url))
         for art in my_art:
-            page = get_wb(art["href"])
-            if page:
-                img_url = parse(page)
+            pages = get_wb(art["href"])
+            if pages:
+                img_url = parse(pages)
                 save(img_url,"J:/crawler/try")
         page = page - 1
         if page == page_stop:
