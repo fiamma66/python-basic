@@ -76,8 +76,9 @@ def save(img_url,title): ##儲存圖片
 #url = "https://www.dcard.tw/_api/forums/sex/posts?popular=true&limit=30&before=230349407"
 def main():
     file = input("存放位置 ex: J:/crawler/try")
-
+    page_count = int(input("想抓多少 建議大約10頁就好")) * 1000
     page = 230355445
+    threshold = page - page_count
     #endpoint = page - page_count
     while True:
         url = "https://www.dcard.tw/_api/forums/sex/posts?popular=false&limit=30&before="+str(page)
@@ -88,7 +89,8 @@ def main():
              save(parse(get_wb(j["url"])),file)
 
         page = page - 1000
-
+        if page == threshold:
+            break
 
 
 
