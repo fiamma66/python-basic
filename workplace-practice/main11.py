@@ -3,6 +3,7 @@ import os
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import re
+import shutil
 from urllib.request import urlretrieve
 import json
 
@@ -50,35 +51,45 @@ def parse(dom): ## 找到文章內所有圖片超連結
     return img_url
 
 def save(img_url,title): ##儲存圖片
+    header = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'}
     if img_url :
         try:
+            # 設定儲存路徑
             dname = title.strip() # 去除字串前後空白
             if not os.path.exists(dname):
-                os.mkdir(dname)
+                os.makedirs(dname)
             for url in img_url :
-                if url.split("//")[1].startswith("m."):
-                    url = url.replace("//m.", "//i.")
-                if not url.split("//")[1].startswith("i."):
-                    url = url.split("//")[0] + "//i." + url.split("//")[1]
                 if not url.endswith(".jpg"):
                     url = url + ".jpg"
                 fname = url.split("/")[-1]
-                urlretrieve(url, os.path.join(dname,fname))
+                r = requests.get(url,stream = True, headers=header)
+                if r.status_code == 200:
+                    with open(os.path.join(dname,fname),"wb") as f :
+                        r.raw.decode_content = True
+                        shutil.copyfileobj(r.raw , f)
+
+
+
         except Exception as e:
             print(e)
 
 #url = "https://www.dcard.tw/_api/forums/sex/posts?popular=true&limit=30&before=230349407"
 def main():
-    #file = input("存放位置 ex: J:/crawler/try")
+    file = input("存放位置 ex: J:/crawler/try")
 
-    page = 230349407
+    page = 230355445
     #endpoint = page - page_count
+    while True:
+        url = "https://www.dcard.tw/_api/forums/sex/posts?popular=false&limit=30&before="+str(page)
+        print("現在處理 : ",url)
+        urlpage = get_wb(url)
+        js = get_json_article(urlpage)
+        for j in js:
+             save(parse(get_wb(j["url"])),file)
 
-    url = "https://www.dcard.tw/_api/forums/sex/posts?popular=true&limit=30&before="+str(page)
-    urlpage = get_wb(url)
-    js = get_json_article(urlpage)
-    for j in js:
-         print(parse(get_wb(j["url"])))
+        page = page - 1000
+
+
 
 
 
@@ -86,10 +97,9 @@ def main():
 
 
 if __name__ == "__main__":
-    #page = 230349407
+   # page = 230349407
    # url = "https://www.dcard.tw/f/merryxmas/p/230347022"
-    url = "https://imgur.dcard.tw/edDxWGO.jpg"
-    #url = "https://www.dcard.tw/_api/forums/sex/posts?popular=true&limit=30&before=" + str(page)
+    #url = "https://imgur.dcard.tw/edDxWGO.jpg"
+   # url = "https://www.dcard.tw/_api/forums/sex/posts?popular=true&limit=30&before=" + str(page)
     #urlretrieve('https://imgur.dcard.tw/edDxWGO.jpg', "J:/Try")
-    urlretrieve(get_wb(url),"J:/Try")
-
+    main()
