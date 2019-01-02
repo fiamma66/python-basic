@@ -7,9 +7,11 @@ import re
 page = 1
 
 def get_web(url):
+    ## 建立與網站的連線
     try:
         resp = urlopen(
             url = url,
+
         )
         return resp
     except HTTPError as e:
@@ -17,7 +19,9 @@ def get_web(url):
         print(e)
 
 def get_page(dom):
+    ## 建立店家列表與部分資料
     soup = BeautifulSoup(dom,'html.parser')
+    ## 建立HTML格式
     res = soup.find_all("article", class_="serItem")
     article = []
     if res:
@@ -35,9 +39,11 @@ def get_page(dom):
                 "addr" : addr.text.strip(),
                 "spi" : spi[3].text
             })
+    ## 回傳店家列表 為List 內為字典
     return article
 
 def parse(dom):
+    ## 取得每個店家頁面下 評論的網址
     page = 57
     end = 30
     comment_list = []
@@ -59,7 +65,7 @@ def parse(dom):
             for comment in art.find_all("article", itemprop="review"):
                 href = comment.find("a", class_="ga_tracking")["href"]
                 comment_list.append(html_head+href)
-            
+
         page = page + 1
 
     return comment_list
