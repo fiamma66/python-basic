@@ -1,7 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import logging
 # 建立ptt連線
+
+
+
 def get_web(url):
     header = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'}
     resp = requests.get(
@@ -20,7 +24,7 @@ def get_web(url):
 
 # 準備 df 格式
 df = pd.DataFrame(columns=["推文","標題","日期","網址","內容"])
-url = "https://www.ptt.cc/bbs/Food/index.html"
+url = "https://www.ptt.cc/bbs/Food/index1.html"
 for times in range(2):
     # 建立連線
     print("進入ptt : ",url)
