@@ -1,0 +1,7 @@
+Beautifulsoup4
+pandas
+numpy
+selenium
+logmatic-python
+requests
+pymongo

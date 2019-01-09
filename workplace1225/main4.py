@@ -3,7 +3,9 @@
 from urllib.request import urlopen
 from urllib.error import HTTPError
 from bs4 import BeautifulSoup
-page = 1
+import pandas as pd
+page = 59
+df = pd.DataFrame()
 
 while True :
     url = "https://tabelog.com/tw/fukuoka/rstLst/"+ str(page) +"/?SrtT=rt"
