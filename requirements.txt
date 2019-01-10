@@ -5,3 +5,5 @@ selenium
 logmatic-python
 requests
 pymongo
+python-logstash
+
