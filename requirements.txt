@@ -6,4 +6,7 @@ logmatic-python
 requests
 pymongo
 python-logstash
+keras
+graphviz
+scikit-learn
 
